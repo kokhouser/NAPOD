@@ -1,5 +1,5 @@
 # NASA Astronomy Picture Of The Day (NAPOD)
-Simple Android Application that uses NASA's APOD API
+Simple Android Application that uses NASA's [APOD API](https://api.nasa.gov/api.html#apod).
 
 Main goal of this app was to get familiar with some essential libraries. The space pics are a nice bonus.
 
