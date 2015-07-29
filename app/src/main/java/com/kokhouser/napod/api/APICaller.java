@@ -1,9 +1,14 @@
 package com.kokhouser.napod.api;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Environment;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
 
 import com.kokhouser.napod.models.Astropic;
 import com.kokhouser.napod.ui.MainActivity;
@@ -49,10 +54,9 @@ public class APICaller {
         apodapiInterface.getPictureWithKey(key, new Callback<Astropic>() {
             @Override
             public void success(Astropic astropic, Response response) {
-                if (astropic.getMediaType()!=null && astropic.getMediaType().equals("video")){
+                if (astropic.getMediaType() != null && astropic.getMediaType().equals("video")) {
                     getRandomPicture(key);
-                }
-                else{
+                } else {
                     mainView.setPicture(astropic);
                 }
             }
@@ -106,22 +110,22 @@ public class APICaller {
 
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
-                if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-                    try {
-                            final String fileName = currentPicture.getTitle() + ".jpg";
-                            File file = new File(Environment.getExternalStorageDirectory() + "/NAPOD/" + fileName);
-                            Log.d("File Path", file.getAbsolutePath());
-                            file.createNewFile();
-                            FileOutputStream ostream = new FileOutputStream(file);
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
-                            ostream.close();
-                            parentActivity.showSnackBar("Image downloaded.");
-                    } catch (Exception e){
-                    e.printStackTrace();
-                    parentActivity.showSnackBar("Error occurred with download.");
-                    }
-                } else{
-                    parentActivity.showSnackBar("Error occurred with download.");
+                parentActivity.showSnackBar("Starting download.");
+                try {
+                        String fileName1 = currentPicture.getTitle() + ".jpg";
+                        final String fileName = fileName1.replace(" ","_");
+                        File file = new File(Environment.getExternalStorageDirectory() + File.separator+ "NAPOD");
+                        Log.d("File Path", file.getAbsolutePath());
+                        file.mkdirs();
+                        file = new File(Environment.getExternalStorageDirectory() + File.separator+ "NAPOD" + File.separator + fileName);
+                        file.createNewFile();
+                        FileOutputStream ostream = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
+                        ostream.close();
+                    parentActivity.showDownloadedSnackBar(file.getAbsolutePath());
+                } catch (Exception e){
+                e.printStackTrace();
+                parentActivity.showSnackBar("Error occurred with download.");
                 }
             }
 
