@@ -1,8 +1,18 @@
 package com.kokhouser.napod.api;
 
-import com.kokhouser.napod.models.Astropic;
-import com.kokhouser.napod.ui.MainView;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
+import android.util.Log;
 
+import com.kokhouser.napod.models.Astropic;
+import com.kokhouser.napod.ui.MainActivity;
+import com.kokhouser.napod.ui.MainView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,6 +45,7 @@ public class APICaller {
     }
 
     public void callPictureAPIWithKey(final String key){
+        mainView.showProgress();
         apodapiInterface.getPictureWithKey(key, new Callback<Astropic>() {
             @Override
             public void success(Astropic astropic, Response response) {
@@ -69,10 +80,9 @@ public class APICaller {
         apodapiInterface.getPictureWithKeyAndDate(key, date, new Callback<Astropic>() {
             @Override
             public void success(Astropic astropic, Response response) {
-                if (astropic.getMediaType()!=null && astropic.getMediaType().equals("video")){
+                if (astropic.getMediaType() != null && astropic.getMediaType().equals("video")) {
                     getRandomPicture(key);
-                }
-                else{
+                } else {
                     mainView.setPicture(astropic);
                 }
             }
@@ -83,6 +93,46 @@ public class APICaller {
                 mainView.hideProgress();
             }
         });
+    }
+
+    public void downloadImage(final MainActivity parentActivity, final Astropic currentPicture){
+
+        Target target = new Target() {
+
+            @Override
+            public void onPrepareLoad(Drawable arg0) {
+                return;
+            }
+
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
+                if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+                    try {
+                            final String fileName = currentPicture.getTitle() + ".jpg";
+                            File file = new File(Environment.getExternalStorageDirectory() + "/NAPOD/" + fileName);
+                            Log.d("File Path", file.getAbsolutePath());
+                            file.createNewFile();
+                            FileOutputStream ostream = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
+                            ostream.close();
+                            parentActivity.showSnackBar("Image downloaded.");
+                    } catch (Exception e){
+                    e.printStackTrace();
+                    parentActivity.showSnackBar("Error occurred with download.");
+                    }
+                } else{
+                    parentActivity.showSnackBar("Error occurred with download.");
+                }
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable arg0) {
+                parentActivity.showSnackBar("Error occurred with download.");
+            }
+        };
+        Picasso.with(parentActivity)
+                .load(currentPicture.getUrl())
+                .into(target);
     }
 
 }
