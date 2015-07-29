@@ -15,7 +15,9 @@ import retrofit.client.Response;
 
 /**
  * Created by hkok on 7/28/2015.
+ * Class to handle API requests
  */
+
 public class APICaller {
 
     private static final String BASE_URL = "https://api.nasa.gov";
@@ -32,11 +34,16 @@ public class APICaller {
         apodapiInterface = restAdapter.create(APODAPIInterface.class);
     }
 
-    public void callPictureAPIWithKey(String key){
+    public void callPictureAPIWithKey(final String key){
         apodapiInterface.getPictureWithKey(key, new Callback<Astropic>() {
             @Override
             public void success(Astropic astropic, Response response) {
-                mainView.setPicture(astropic);
+                if (astropic.getMediaType()!=null && astropic.getMediaType().equals("video")){
+                    getRandomPicture(key);
+                }
+                else{
+                    mainView.setPicture(astropic);
+                }
             }
 
             @Override
@@ -57,12 +64,17 @@ public class APICaller {
         callPictureAPIWithKeyAndDate(apiKey, yesterday);
     }
 
-    public void callPictureAPIWithKeyAndDate(String key, String date){
+    public void callPictureAPIWithKeyAndDate(final String key, String date){
         mainView.showProgress();
         apodapiInterface.getPictureWithKeyAndDate(key, date, new Callback<Astropic>() {
             @Override
             public void success(Astropic astropic, Response response) {
-                mainView.setPicture(astropic);
+                if (astropic.getMediaType()!=null && astropic.getMediaType().equals("video")){
+                    getRandomPicture(key);
+                }
+                else{
+                    mainView.setPicture(astropic);
+                }
             }
 
             @Override
