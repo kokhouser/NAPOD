@@ -1,13 +1,18 @@
 package com.kokhouser.napod.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by hkok on 7/28/2015.
+ * Using code generated from http://www.jsonschema2pojo.org/
  */
+
 public class Astropic {
     private String url;
+    @SerializedName("media_type")
     private String mediaType;
     private String explanation;
     private Object concepts;

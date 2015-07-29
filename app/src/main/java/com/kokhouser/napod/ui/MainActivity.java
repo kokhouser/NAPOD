@@ -1,65 +1,62 @@
 package com.kokhouser.napod.ui;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.kokhouser.napod.R;
 import com.kokhouser.napod.api.APICaller;
 import com.kokhouser.napod.models.Astropic;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class MainActivity extends AppCompatActivity implements MainView {
 
+    //Dependencies
     private static String apiKey = "zOIkuYtyT6JwZSG06BKhc9gD4GwNEVnMYuSPwLUN";
     private Astropic currentPicture;
-    boolean isImageFitToScreen;
-    private ImageView imageView;
-    private ImageView refreshView;
     private APICaller apiCaller = new APICaller(this);
-    private ProgressBar progressBar;
+
+    //View injections, using Butterknife
+    @InjectView(R.id.imageView)
+    ImageView imageView;
+
+    @InjectView(R.id.icon_download)
+    ImageView downloadView;
+
+    @InjectView(R.id.progressbar)
+    ProgressBar progressBar;
+
+    @InjectView(R.id.picture_title)
+    TextView titleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        progressBar = (ProgressBar) findViewById(R.id.progressbar);
-        refreshView = (ImageView) findViewById(R.id.icon_refresh);
-        imageView = (ImageView) findViewById(R.id.imageView);
-        setListeners();
-        isImageFitToScreen = false;
+        ButterKnife.inject(this);
         apiCaller.callPictureAPIWithKey(apiKey);
         //getRandomPicture();
     }
 
-    private void setListeners(){
-        refreshView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                apiCaller.getRandomPicture(apiKey);
-            }
-        });
-    }
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    public void onSaveInstanceState(Bundle savedInstanceState) {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -77,28 +74,71 @@ public class MainActivity extends AppCompatActivity implements MainView {
         currentPicture = picture;
         updateImage();
         updateTitle();
+        setListeners();
     }
 
+    private void setListeners(){
+        downloadView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                downloadImage();
+            }
+        });
+        imageView.setOnTouchListener(new OnSwipeTouchListener(this){
+            public void onSwipeLeft() {
+                apiCaller.getRandomPicture(apiKey);
+            }
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
+    }
+
+    // Obtaining bitmap resource using Picasso and loading into imageview
+    // May be prudent to move this to another abstraction?
     private void updateImage(){
         Picasso.with(this)
                 .load(currentPicture.getUrl())
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE) //Reduces memory usage by 50%, we likely won't use images after refresh.
                 .into(imageView, new Callback() {
                     @Override
                     public void onSuccess() {
+                        Log.d("Succeeded", "Loaded image");
                         hideProgress();
                     }
 
                     @Override
                     public void onError() {
+                        Log.d("Failed", "Didn't load image");
                         hideProgress();
                     }
                 });
     }
 
-    private void updateTitle(){
-        TextView titleView = (TextView) findViewById(R.id.picture_title);
-        titleView.setText(currentPicture.getTitle());
+    public void showSnackBar(String message){
+        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
+                .show();
     }
 
+    public void showDownloadedSnackBar(final String fileName){
+        Snackbar.make(findViewById(android.R.id.content), "Image downloaded", Snackbar.LENGTH_LONG)
+                .setAction("View", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.fromFile(new File(fileName)), "image/*");
+                        startActivity(intent);
+                    }
+                })
+                .show();
+    }
 
+    private void downloadImage(){
+        apiCaller.downloadImage(this, currentPicture);
+    }
+
+    private void updateTitle(){
+        titleView.setText(currentPicture.getTitle());
+    }
 }

@@ -4,11 +4,11 @@ import com.kokhouser.napod.models.Astropic;
 
 import retrofit.Callback;
 import retrofit.http.GET;
-import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
  * Created by hkok on 7/28/2015.
+ * Retrofit API Interface for the NASA APOD API
  */
 public interface APODAPIInterface {
     @GET("/planetary/apod")
