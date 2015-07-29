@@ -5,6 +5,11 @@ Main goal of this app was to get familiar with some essential libraries. The spa
 
 ![](https://raw.githubusercontent.com/kokhouser/NAPOD/master/screenshot.png?token=ADvdVXEXpNKXEe7VNky8uRRBcipncU83ks5Vwg3NwA%3D%3D)
 
+#FEATURES
+- Current picture of the day will be loaded upon starting the app.
+- Swipe right to obtain a random picture from sometime in the past year.
+- Download the pictures, and set them as your device's wallpaper.
+
 #TODO
 - Add ability to track pictures across multiple days instead of doing it randomly (limited by NASA's API).
 - Add some form of gallery view.
