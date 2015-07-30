@@ -10,6 +10,7 @@ Main goal of this app was to get familiar with some essential libraries. The spa
 - Swipe right to obtain a random picture from sometime in the past year.
 - Download the pictures, and set them as your device's wallpaper.
 - [Muzei](https://play.google.com/store/apps/details?id=net.nurik.roman.muzei&hl=en) support: Select NAPOD as a wallpaper source, and a new NAPOD wallpaper would automatically be chosen every day. *Warning: NAPOD pictures are not guaranteed to be perfect wallpaper material.*
+- As a bonus, as of Muzei 2.0, Android Wear watchface support is also provided with Muzei. Select "Muzei" on your Android Wear device to use the watchface.
 
 #TODO
 - Add ability to track pictures across multiple days instead of doing it randomly (limited by NASA's API).
