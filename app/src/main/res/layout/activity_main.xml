@@ -33,7 +33,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginRight="15dp"
                 android:textSize="@dimen/abc_text_size_medium_material"
-                android:text="@string/placeholder_title"
                 android:textColor="@color/abc_primary_text_material_dark" />
 
             <net.steamcrafted.materialiconlib.MaterialIconView
