@@ -13,6 +13,7 @@ import com.kokhouser.napod.ui.MainView;
  */
 public class NAPODArtSource extends MuzeiArtSource implements MainView {
     private static final String SOURCE_NAME = "NAPODSource";
+    private static final int ROTATE_TIME_MILLIS = 60 * 60 * 24 * 1000; // rotate every 24 hours
     private static String apiKey = "zOIkuYtyT6JwZSG06BKhc9gD4GwNEVnMYuSPwLUN";
     APICaller apiCaller;
     private Astropic currentPicture;
@@ -26,6 +27,7 @@ public class NAPODArtSource extends MuzeiArtSource implements MainView {
     protected void onUpdate(int reason) {
         try{
             apiCaller.callPictureAPIWithKey("DEMO_KEY");
+            scheduleUpdate(System.currentTimeMillis() + ROTATE_TIME_MILLIS);
         }
         catch (Exception e){
             e.printStackTrace();
