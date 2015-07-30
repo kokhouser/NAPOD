@@ -9,6 +9,7 @@ Main goal of this app was to get familiar with some essential libraries. The spa
 - Current picture of the day will be loaded upon starting the app.
 - Swipe right to obtain a random picture from sometime in the past year.
 - Download the pictures, and set them as your device's wallpaper.
+- [Muzei](https://play.google.com/store/apps/details?id=net.nurik.roman.muzei&hl=en) support: Select NAPOD as a wallpaper source, and a new NAPOD wallpaper would automatically be chosen every day. *Warning: NAPOD pictures are not guaranteed to be perfect wallpaper material.*
 
 #TODO
 - Add ability to track pictures across multiple days instead of doing it randomly (limited by NASA's API).
