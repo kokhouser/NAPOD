@@ -1,6 +1,8 @@
 # NASA Astronomy Picture Of The Day (NAPOD)
 Simple Android Application that uses NASA's [APOD API](https://api.nasa.gov/api.html#apod).
 
+Now available from the [Play Store](https://play.google.com/store/apps/details?id=com.kokhouser.napod)
+
 Main goal of this app was to get familiar with some essential libraries. The space pics are a nice bonus.
 
 ![](https://raw.githubusercontent.com/kokhouser/NAPOD/master/screenshot.png?token=ADvdVXEXpNKXEe7VNky8uRRBcipncU83ks5Vwg3NwA%3D%3D)
