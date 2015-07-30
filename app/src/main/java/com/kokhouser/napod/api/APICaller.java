@@ -105,12 +105,11 @@ public class APICaller {
 
             @Override
             public void onPrepareLoad(Drawable arg0) {
-                return;
+                // Do nothing
             }
 
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
-                parentActivity.showSnackBar("Starting download.");
                 try {
                         String fileName1 = currentPicture.getTitle() + ".jpg";
                         final String fileName = fileName1.replace(" ","_");
@@ -128,15 +127,12 @@ public class APICaller {
                 parentActivity.showSnackBar("Error occurred with download.");
                 }
             }
-
             @Override
             public void onBitmapFailed(Drawable arg0) {
                 parentActivity.showSnackBar("Error occurred with download.");
             }
         };
-        Picasso.with(parentActivity)
-                .load(currentPicture.getUrl())
-                .into(target);
+        parentActivity.updateImageWithTarget(target);
     }
 
 }

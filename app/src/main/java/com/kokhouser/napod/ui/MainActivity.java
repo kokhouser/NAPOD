@@ -19,6 +19,7 @@ import com.kokhouser.napod.models.Astropic;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.File;
 
@@ -50,8 +51,18 @@ public class MainActivity extends AppCompatActivity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-        apiCaller.callPictureAPIWithKey(apiKey);
-        //getRandomPicture();
+        try{
+            apiCaller.callPictureAPIWithKey("DEMO_KEY");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            try {
+                apiCaller.callPictureAPIWithKey(apiKey);
+            }
+            catch (Exception f) {
+                f.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -84,10 +95,22 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 downloadImage();
             }
         });
-        imageView.setOnTouchListener(new OnSwipeTouchListener(this){
+        imageView.setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeLeft() {
-                apiCaller.getRandomPicture(apiKey);
+                try{
+                    apiCaller.getRandomPicture("DEMO_KEY");
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    try {
+                        apiCaller.getRandomPicture(apiKey);
+                    }
+                    catch (Exception f) {
+                        f.printStackTrace();
+                    }
+                }
             }
+
             public boolean onTouch(View v, MotionEvent event) {
                 return gestureDetector.onTouchEvent(event);
             }
@@ -113,6 +136,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
                         hideProgress();
                     }
                 });
+    }
+
+    public void updateImageWithTarget(Target target){
+        Picasso.with(this)
+                .load(currentPicture.getUrl())
+                .into(target);
     }
 
     public void showSnackBar(String message){
