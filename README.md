@@ -37,3 +37,6 @@ Main goal of this app was to get familiar with some essential libraries. The spa
 - [Butterknife](https://github.com/JakeWharton/butterknife)
 
   `compile 'com.jakewharton:butterknife:6.1.0'`
+- [Muzei Live Wallpaper API](https://github.com/romannurik/muzei/wiki/API)
+
+  `compile 'com.google.android.apps.muzei:muzei-api:+'`
