@@ -15,5 +15,6 @@ public interface APODAPIInterface {
     void getPictureWithKey(@Query("api_key")String apiKey, Callback<Astropic> cb);
 
     @GET("/planetary/apod")
-    void getPictureWithKeyAndDate(@Query("api_key")String apiKey, @Query("date")String date, Callback<Astropic> cb);
+    void getPictureWithKeyAndDate(@Query("api_key")String apiKey, @Query("date")String date,
+                                  Callback<Astropic> cb);
 }

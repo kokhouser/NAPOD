@@ -122,7 +122,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private void updateImage(){
         Picasso.with(this)
                 .load(currentPicture.getUrl())
-                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE) //Reduces memory usage by 50%, we likely won't use images after refresh.
+                //Reduces memory usage by 50%, we likely won't use images after refresh.
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .into(imageView, new Callback() {
                     @Override
                     public void onSuccess() {

@@ -108,10 +108,12 @@ public class APICaller {
                 try {
                         String fileName1 = currentPicture.getTitle() + ".jpg";
                         final String fileName = fileName1.replace(" ","_");
-                        File file = new File(Environment.getExternalStorageDirectory() + File.separator+ "NAPOD");
+                        File file = new File(Environment.getExternalStorageDirectory()
+                                + File.separator+ "NAPOD");
                         Log.d("File Path", file.getAbsolutePath());
                         file.mkdirs();
-                        file = new File(Environment.getExternalStorageDirectory() + File.separator+ "NAPOD" + File.separator + fileName);
+                        file = new File(Environment.getExternalStorageDirectory() + File.separator
+                                + "NAPOD" + File.separator + fileName);
                         file.createNewFile();
                         FileOutputStream ostream = new FileOutputStream(file);
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
